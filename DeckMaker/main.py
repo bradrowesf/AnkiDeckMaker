@@ -1,5 +1,6 @@
 import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("echo")
-args = parser.parse_args()
-print args.echo
+
+from deckoptions import DeckOptions
+
+options = DeckOptions(argparse.ArgumentParser())
+print options.pathToConfig()
