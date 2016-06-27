@@ -9,5 +9,8 @@ class Configuration(object):
 		self.configs = json.loads(configRaw)
 		configFile.close()
 			
-	def getTestValue(self):
-		return self.configs['testvalue']
+	def getUpperRange(self):
+		return self.configs['upper_range']
+		
+	def getLowerRange(self):
+		return self.configs['lower_range']

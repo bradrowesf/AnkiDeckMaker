@@ -1,7 +1,4 @@
 {
-
-"testvalue" : "eu-west-1",
-
-"instanceType": "m1.small"
-
+"lower_range": "e2",
+"upper_range": "e4"
 }
