@@ -2,8 +2,9 @@ import argparse
 
 class DeckOptions(object):
 	
-	def __init__(self, parser):
+	def __init__(self):
 		
+		parser = argparse.ArgumentParser()
 		self.addArgs(parser)
 		self.args = parser.parse_args()
 		
