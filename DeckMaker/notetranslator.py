@@ -4,35 +4,68 @@ class NoteTranslator(object):
 	def __init__(self):
 	
 		self.noteTable = {}
-		possibleNotes = [ 'A','B','C','D','E','F','G' ]
-		currentOctave = 0
-		currentNote = 0
-		midiPitchValue = 21
-		while midiPitchValue < 33: #change to 109 later
-			print midiPitchValue
-			self.noteTable[ possibleNotes[currentNote] + str(currentOctave) ] = midiPitchValue 
-			midiPitchValue += 1
-			
-			if self.HasSharp( possibleNotes[currentNote] ):
-				self.noteTable[ possibleNotes[currentNote] + '#' + str(currentOctave) ] = midiPitchValue
-				
-			if currentNote < len(possibleNotes) - 1:
-				currentNote += 1
-			else:
-				currentNote = 0
-
-##			if possibleNote[currentNote] != 'B' and possibleNote[currentNote] != 'E':
-##			self.noteTable.append( possibleNote[currentNote] + '#' + str(currentOctave), midiPitchValue )
-##			self.noteTable.append( possibleNote[currentNote + 1]  + 'b' + str(currentOctave), midiPitchValue )
-				
+		possibleNotes = [ 'C','D','E','F','G','A','B' ]
+		self.currentOctave = 0
+		self.currentNote = 5 	# start on 'A'
+		midiPitchValue = 21		# Lowest note on piano
+		
+		while midiPitchValue < 109: #change to 109 later
+			if self.AccidentalCase(midiPitchValue) == 0:	# standard natural note
+				self.noteTable[ possibleNotes[self.currentNote] + str(self.currentOctave) ] = midiPitchValue 
+				midiPitchValue += 1
+			elif self.AccidentalCase(midiPitchValue) == 1:	# standard sharp/flat pair
+				# add sharp
+				self.noteTable[ possibleNotes[self.currentNote] + '#' + str(self.currentOctave) ] = midiPitchValue
+				# move note, add flat, then move on
+				self.IncrementNoteIndex()
+				self.noteTable[ possibleNotes[self.currentNote] + 'b' + str(self.currentOctave) ] = midiPitchValue
+				midiPitchValue += 1
+			elif self.AccidentalCase(midiPitchValue) == 2:	# natural/flat pair
+				# add natural
+				self.noteTable[ possibleNotes[self.currentNote] + str(self.currentOctave) ] = midiPitchValue 
+				# move note, add flat, move note back, then move on
+				self.IncrementNoteIndex()
+				self.noteTable[ possibleNotes[self.currentNote] + 'b' + str(self.currentOctave) ] = midiPitchValue
+				self.DecrementNoteIndex()
+				midiPitchValue += 1
+			else:	# sharp/natural pair
+				# add sharp
+				self.noteTable[ possibleNotes[self.currentNote] + '#' + str(self.currentOctave) ] = midiPitchValue
+				# move note, add natural, move on
+				self.IncrementNoteIndex()
+				self.noteTable[ possibleNotes[self.currentNote] + str(self.currentOctave) ] = midiPitchValue 
+				midiPitchValue += 1
+					
 	def DumpTable(self):
 		
 		print self.noteTable
 		
-	def HasSharp(self, note):
+	def AccidentalCase(self, pitchValue):
 	
-		#Add Sharp for A, C, D, F, G
-		if note == 'A' or note == 'C' or note == 'D' or note == 'F' or note == 'G':
-			return True
+		foo = ( pitchValue - 21 ) % 12
+		
+		if foo == 0 or foo == 5 or foo == 10:
+			return 0
+		elif foo == 1 or foo == 4 or foo == 6 or foo == 9 or foo == 11:
+			return 1
+		elif foo == 2 or foo == 7:
+			return 2
+		else:
+			return 3
 			
-		return False
+	def IncrementNoteIndex(self):
+	
+		if self.currentNote < 6:
+			self.currentNote += 1
+		else:
+			self.currentNote = 0
+			self.currentOctave += 1	# next octave
+
+	def DecrementNoteIndex(self):
+	
+		if self.currentNote > 0:
+			self.currentNote -= 1
+		else:
+			self.currentNote = 6
+			self.currentOctave -= 1	# last octave
+		
