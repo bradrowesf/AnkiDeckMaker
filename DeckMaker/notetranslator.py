@@ -44,6 +44,12 @@ class NoteTranslator(object):
 	
 		return self.noteTable[note]
 		
+	def GetMidiNoteHexString(self, note):
+	
+		#return just the raw hex, no '0x' stuff
+		outString = hex(self.noteTable[note]).lstrip('0x')
+		return outString
+		
 	def AccidentalCase(self, pitchValue):
 	
 		foo = ( pitchValue - 21 ) % 12
