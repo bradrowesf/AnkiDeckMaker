@@ -40,6 +40,10 @@ class NoteTranslator(object):
 		
 		print self.noteTable
 		
+	def GetMidiCode(self, note):
+	
+		return self.noteTable[note]
+		
 	def AccidentalCase(self, pitchValue):
 	
 		foo = ( pitchValue - 21 ) % 12
