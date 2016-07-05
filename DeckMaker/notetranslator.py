@@ -1,9 +1,11 @@
 
+from note import Note
+
 class NoteTranslator(object):
 
 	def __init__(self):
 	
-		self.noteTable = {}
+		self.noteTable = []
 		possibleNotes = [ 'C','D','E','F','G','A','B' ]
 		self.currentOctave = 0
 		self.currentNote = 5 	# start on 'A'
@@ -11,43 +13,58 @@ class NoteTranslator(object):
 		
 		while midiPitchValue < 109: #change to 109 later
 			if self.AccidentalCase(midiPitchValue) == 0:	# standard natural note
-				self.noteTable[ possibleNotes[self.currentNote] + str(self.currentOctave) ] = midiPitchValue 
+				noteName = possibleNotes[self.currentNote] + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				midiPitchValue += 1
 			elif self.AccidentalCase(midiPitchValue) == 1:	# standard sharp/flat pair
 				# add sharp
-				self.noteTable[ possibleNotes[self.currentNote] + '#' + str(self.currentOctave) ] = midiPitchValue
+				noteName = possibleNotes[self.currentNote] + '#' + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				# move note, add flat, then move on
 				self.IncrementNoteIndex()
-				self.noteTable[ possibleNotes[self.currentNote] + 'b' + str(self.currentOctave) ] = midiPitchValue
+				noteName = possibleNotes[self.currentNote] + 'b' + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				midiPitchValue += 1
 			elif self.AccidentalCase(midiPitchValue) == 2:	# natural/flat pair
 				# add natural
-				self.noteTable[ possibleNotes[self.currentNote] + str(self.currentOctave) ] = midiPitchValue 
+				noteName = possibleNotes[self.currentNote] + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				# move note, add flat, move note back, then move on
 				self.IncrementNoteIndex()
-				self.noteTable[ possibleNotes[self.currentNote] + 'b' + str(self.currentOctave) ] = midiPitchValue
+				noteName = possibleNotes[self.currentNote] + 'b' + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				self.DecrementNoteIndex()
 				midiPitchValue += 1
 			else:	# sharp/natural pair
 				# add sharp
-				self.noteTable[ possibleNotes[self.currentNote] + '#' + str(self.currentOctave) ] = midiPitchValue
+				noteName = possibleNotes[self.currentNote] + '#' + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				# move note, add natural, move on
 				self.IncrementNoteIndex()
-				self.noteTable[ possibleNotes[self.currentNote] + str(self.currentOctave) ] = midiPitchValue 
+				noteName = possibleNotes[self.currentNote] + str(self.currentOctave)
+				self.noteTable.append( Note( noteName, midiPitchValue))
 				midiPitchValue += 1
 					
-	def DumpTable(self):
+	def DumpNotes(self):
 		
-		print self.noteTable
+		# for debugging
+		for note in self.noteTable:
+			print note.Name() + " " + str(note.MidiValue()) + " " + str(note.ScaleValue())
 		
-	def GetMidiCode(self, note):
+	def GetMidiCode(self, inNote):
 	
-		return self.noteTable[note]
+		# inNote is the human readable note name string
+		for note in self.noteTable:
+			if note.Name() == inNote:
+				return note.MidiValue()
+				
+		# it's bad if you hit this		
+		assert()
 		
 	def GetMidiNoteHexString(self, note):
 	
 		#return just the raw hex, no '0x' stuff
-		outString = hex(self.noteTable[note]).lstrip('0x')
+		outString = hex(self.GetMidiCode(note)).lstrip('0x')
 		return outString
 		
 	def AccidentalCase(self, pitchValue):

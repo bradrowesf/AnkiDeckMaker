@@ -11,6 +11,7 @@ print "Loading config file: " + options.pathToConfig()
 configs = Configuration (options.pathToConfig())
 
 translator = NoteTranslator()
+translator.DumpNotes()
 
 fileManager = FileManager(options.pathToOutput())
 fileManager.Write()
