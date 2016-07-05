@@ -19,10 +19,10 @@ def test_basic():
 	
 def test_hex():
 	translator = NoteTranslator()
-	assert_equal(translator.GetMidiCode("E5"),"4c")
-	assert_equal(translator.GetMidiCode("C1"),"18")
-	assert_equal(translator.GetMidiCode("Ab6"),"5c")
-	assert_equal(translator.GetMidiCode("Gb7"),"66")
-	assert_equal(translator.GetMidiCode("D#2"),"27")
+	assert_equal(translator.GetMidiNoteHexString("E5"),"4c")
+	assert_equal(translator.GetMidiNoteHexString("C1"),"18")
+	assert_equal(translator.GetMidiNoteHexString("Ab6"),"5c")
+	assert_equal(translator.GetMidiNoteHexString("Gb7"),"66")
+	assert_equal(translator.GetMidiNoteHexString("D#2"),"27")
 	pass
 
