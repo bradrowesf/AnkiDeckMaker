@@ -61,11 +61,55 @@ class NoteTranslator(object):
 		# it's bad if you hit this		
 		assert()
 		
-	def GetMidiNoteHexString(self, note):
+	def GetMidiCodeHexString(self, note):
 	
 		#return just the raw hex, no '0x' stuff
 		outString = hex(self.GetMidiCode(note)).lstrip('0x')
 		return outString
+		
+	def GetTriadCodes(self, lowestNote, quality, inversion):
+	
+		# inversion is 1 based like in music
+		# lowest note (i.e. not necessarily the root of the chord)
+		
+		outNotes = []
+		lowestNoteCode = self.GetMidiCode(lowestNote)
+		outNotes.append(lowestNoteCode)  # we know this ones there
+		thirdSteps = 0	# changed later
+		fifthSteps = 7
+		octaveSteps = 12
+		
+		# major or minor third
+		if quality == "major":
+			thirdSteps = 4
+		elif quality == "minor":
+			thirdSteps = 3
+		else:
+			assert() #bad
+		
+		if inversion == 1:
+			outNotes.append(lowestNoteCode + thirdSteps)
+			outNotes.append(lowestNoteCode + fifthSteps)
+		elif inversion == 2:
+			outNotes.append(lowestNoteCode - thirdSteps + octaveSteps)
+			outNotes.append(lowestNoteCode - thirdSteps + fifthSteps)
+		elif inversion == 3:
+			outNotes.append(lowestNoteCode - fifthSteps + octaveSteps)
+			outNotes.append(lowestNoteCode - fifthSteps + octaveSteps + thirdSteps)
+		else:
+			assert() #bad
+			
+		return outNotes
+		
+	def GetTriadHexCodeStrings(self, lowestNote, quality, inversion):
+	
+		outNoteStrings = []
+		outNotes = self.GetTriadCodes( lowestNote, quality, inversion)
+		for noteValue in outNotes:
+			outNoteStrings.append( hex(noteValue).lstrip('0x'))
+			
+		return outNoteStrings
+		
 		
 	def AccidentalCase(self, pitchValue):
 	
@@ -96,3 +140,20 @@ class NoteTranslator(object):
 			self.currentNote = 6
 			self.currentOctave -= 1	# last octave
 		
+		
+if __name__ == "__main__":
+
+	translator = NoteTranslator()
+	values = translator.GetTriadCodes( "C4", "minor", 3)
+	print values
+	values = translator.GetTriadCodes( "Ab2", "major", 2)
+	print values
+	values = translator.GetTriadCodes( "G#6", "minor", 1)
+	print values
+	
+	valueStrings = translator.GetTriadHexCodeStrings( "C4", "major", 1)
+	print valueStrings	
+	valueStrings = translator.GetTriadHexCodeStrings( "Ab2", "major", 2)
+	print valueStrings	
+	valueStrings = translator.GetTriadHexCodeStrings( "G#6", "minor", 1)
+	print valueStrings

@@ -14,4 +14,4 @@ translator = NoteTranslator()
 translator.DumpNotes()
 
 fileManager = FileManager(options.pathToOutput())
-fileManager.Write()
+#fileManager.Write()

@@ -19,10 +19,22 @@ def test_basic():
 	
 def test_hex():
 	translator = NoteTranslator()
-	assert_equal(translator.GetMidiNoteHexString("E5"),"4c")
-	assert_equal(translator.GetMidiNoteHexString("C1"),"18")
-	assert_equal(translator.GetMidiNoteHexString("Ab6"),"5c")
-	assert_equal(translator.GetMidiNoteHexString("Gb7"),"66")
-	assert_equal(translator.GetMidiNoteHexString("D#2"),"27")
+	assert_equal(translator.GetMidiCodeHexString("E5"),"4c")
+	assert_equal(translator.GetMidiCodeHexString("C1"),"18")
+	assert_equal(translator.GetMidiCodeHexString("Ab6"),"5c")
+	assert_equal(translator.GetMidiCodeHexString("Gb7"),"66")
+	assert_equal(translator.GetMidiCodeHexString("D#2"),"27")
 	pass
 
+def test_GetTriadCodes():
+	translator = NoteTranslator()
+	assert_equal(translator.GetTriadCodes( "C4", "minor", 3),[60, 65, 68])
+	assert_equal(translator.GetTriadCodes( "Ab2", "major", 2),[44, 52, 47])
+	assert_equal(translator.GetTriadCodes( "G#6", "minor", 1),[92, 95, 99])
+
+
+def test_GetTriadHexCodeStrings():
+	translator = NoteTranslator()
+	assert_equal(translator.GetTriadHexCodeStrings( "C4", "major", 1),['3c', '40', '43'])
+	assert_equal(translator.GetTriadHexCodeStrings( "Ab2", "major", 2),['2c', '34', '2f'])
+	assert_equal(translator.GetTriadHexCodeStrings( "G#6", "minor", 1),['5c', '5f', '63'])

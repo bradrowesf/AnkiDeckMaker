@@ -6,8 +6,8 @@ class FileManager(object):
 	
 		self.outputPath = path
 		
-	def Write(self):
+	def Write(self, inData):
 	
 		file = open(self.outputPath, 'w')
-		file.write("E 3840 90 3f 60")
+		file.write(inData)
 		file.close()
