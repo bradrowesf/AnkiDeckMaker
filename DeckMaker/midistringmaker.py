@@ -49,7 +49,7 @@ class MidiStringMaker(object):
 		
 		return outString
 		
-		
+#test code
 if __name__ == "__main__":
 	translator = NoteTranslator()
 	stringMaker = MidiStringMaker(translator)

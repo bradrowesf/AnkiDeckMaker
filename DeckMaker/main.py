@@ -15,3 +15,6 @@ translator.DumpNotes()
 
 fileManager = FileManager(options.pathToOutput())
 #fileManager.Write()
+
+
+# lets make a chord
