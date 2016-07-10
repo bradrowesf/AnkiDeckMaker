@@ -32,7 +32,7 @@ class MidiStringMaker(object):
 		
 		return outString
 	
-	def KeyDown(self, note, placement, newline = True):
+	def KeyDown(self, note, placement):
 		# note - pitch to add
 		# placement - beats following last event
 
@@ -41,12 +41,11 @@ class MidiStringMaker(object):
 		outString += self.myKeyDown + " "	# note down
 		outString += self.myTranslator.GetHexString(note) + " "
 		outString += self.myVelocity # velocity
-		if newline==True:
-			outString += '\n' 
+		outString += '\n' 
 		
 		return outString
 		
-	def KeyUp(self, note, placement, newline = True):
+	def KeyUp(self, note, placement):
 		# note - pitch to add
 		# placement - beats following last event
 		
@@ -55,26 +54,25 @@ class MidiStringMaker(object):
 		outString += self.myKeyUp + " "	# note up
 		outString += self.myTranslator.GetHexString(note) + " "
 		outString += self.myVelocity  # velocity
-		if newline==True:
-			outString += '\n'
+		outString += '\n'
 		
 		return outString
 		
-	def ChordDown(self, notes, placement, newline = True):
+	def ChordDown(self, notes, placement):
 		# a string for each note in notes
 		
 		outString = ""
 		for note in notes:
-			outString += self.KeyDown( note, placement, newline)
+			outString += self.KeyDown( note, placement)
 			
 		return outString
 		
-	def ChordUp(self, notes, placement, newline = True):
+	def ChordUp(self, notes, placement):
 		# a string for each note in notes
 		
 		outString = ""
 		for note in notes:
-			outString += self.KeyUp( note, placement, newline)
+			outString += self.KeyUp( note, placement)
 			
 		return outString
 	
@@ -86,9 +84,7 @@ if __name__ == "__main__":
 	sm = MidiStringMaker(t)
 	
 	notes = []
-	notes.append(t.GetMidiCodeForHumans("Bb5"))
-	notes.append(t.GetMidiCodeForHumans("G#2"))
-	notes.append(t.GetMidiCodeForHumans("D4"))
-	
-	
-	print sm.AppendChord( notes, 3, 7)
+	notes.append(t.GetMidiCodeForHumans("Gb5"))
+	notes.append(t.GetMidiCodeForHumans("C#2"))
+	notes.append(t.GetMidiCodeForHumans("A3"))
+	print sm.ChordDown( notes, 2)
