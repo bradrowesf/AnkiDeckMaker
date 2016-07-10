@@ -72,11 +72,16 @@ class MidiStringMaker(object):
 		
 		outString = ""
 		for note in notes:
-			outString += self.KeyUp( note, placement)
+			duration = 0
+			if note == notes[0]:
+				duration = placement	# first note only
+			outString += self.KeyUp( note, duration)
 			
 		return outString
 	
+	def TerminateString(self):
 	
+		return "E 0 b0 7b 00\n"
 		
 #test code
 if __name__ == "__main__":
