@@ -37,7 +37,7 @@ class MidiStringMaker(object):
 		# placement - beats following last event
 
 		outString = "E "	# starts w/ this for some reason
-		outString += str(self.ticksPerBeat*placement) + " "	# 960 per beat
+		outString += str(int(self.ticksPerBeat*placement)) + " "	# 960 per beat
 		outString += self.myKeyDown + " "	# note down
 		outString += self.myTranslator.GetHexString(note) + " "
 		outString += self.myVelocity # velocity
@@ -50,7 +50,7 @@ class MidiStringMaker(object):
 		# placement - beats following last event
 		
 		outString = "E "	# starts w/ this for some reason
-		outString += str(self.ticksPerBeat*placement) + " "	# 960 per beat
+		outString += str(int(self.ticksPerBeat*placement)) + " "	# 960 per beat
 		outString += self.myKeyUp + " "	# note up
 		outString += self.myTranslator.GetHexString(note) + " "
 		outString += self.myVelocity  # velocity
@@ -83,8 +83,9 @@ if __name__ == "__main__":
 	t = NoteTranslator()
 	sm = MidiStringMaker(t)
 	
+	humanNotes = ["Cb5","C#2","G7"]
 	notes = []
-	notes.append(t.GetMidiCodeForHumans("Gb5"))
-	notes.append(t.GetMidiCodeForHumans("C#2"))
-	notes.append(t.GetMidiCodeForHumans("A3"))
-	print sm.ChordDown( notes, 2)
+	for note in humanNotes:
+		notes.append(t.GetMidiCodeForHumans(note))
+	
+	print sm.AppendChord( notes, 3.5, 2)
