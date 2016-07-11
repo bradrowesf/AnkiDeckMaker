@@ -63,7 +63,10 @@ class MidiStringMaker(object):
 		
 		outString = ""
 		for note in notes:
-			outString += self.KeyDown( note, placement)
+			duration = 0
+			if note == notes[0]:
+				duration = placement
+			outString += self.KeyDown( note, duration)
 			
 		return outString
 		

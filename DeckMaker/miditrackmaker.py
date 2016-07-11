@@ -9,6 +9,7 @@ class MidiTrackMaker(object):
 		self.myT = translator
 		self.mySM = stringmaker
 		self.myLength = 0	#beats
+		self.myBuffer = 0		
 	
 	def AppendCadence( self, key, quality):
 	
@@ -53,13 +54,21 @@ class MidiTrackMaker(object):
 		
 		# build strings
 		
-		self.myTrack += self.mySM.AppendChord( rootNotes, 0, 2)		# hold for 2 beats
+		self.myTrack += self.mySM.AppendChord( rootNotes, self.myBuffer, 2)		# hold for 2 beats
 		self.myTrack += self.mySM.AppendChord( fourNotes, 0, 1)		# 1 beat
 		self.myTrack += self.mySM.AppendChord( fiveNotes, 0, 1)
 		self.myTrack += self.mySM.AppendChord( rootNotes, 0, 4)		# 4 beats
 		
 		self.myLength += 8
+		self.myBuffer = 0
 		
+	def AppendOneNote( self, note):
+	
+		self.myTrack += self.mySM.AppendNote( note, self.myBuffer, 2)			# half note
+		self.myBuffer = 2	#half note rest
+	
+		self.myLength += 4
+	
 	def Terminate( self):
 
 		self.myTrack += self.mySM.TerminateString()
@@ -81,7 +90,10 @@ if __name__ == "__main__":
 	sm = MidiStringMaker(t)
 	tm = MidiTrackMaker(t,sm)
 	
-	tm.AppendCadence( t.GetMidiCodeForHumans("C1"), "major")
+	tm.AppendCadence( t.GetMidiCodeForHumans("C4"), "major")
+	tm.AppendOneNote( t.GetMidiCodeForHumans("E5"))
+	tm.AppendCadence( t.GetMidiCodeForHumans("C4"), "minor")
+	tm.AppendOneNote( t.GetMidiCodeForHumans("Eb5"))
 	tm.Terminate()
 	print tm.Track()
 	print tm.Length()
