@@ -82,9 +82,12 @@ class MidiStringMaker(object):
 			
 		return outString
 	
-	def TerminateString(self):
+	def TerminateString(self, placement = 0):
 	
-		return "E 0 b0 7b 00\n"
+		outString = "E "
+		outString += str( int(placement*self.ticksPerBeat))
+		outString += " b0 7b 00\n"
+		return outString
 		
 #test code
 if __name__ == "__main__":

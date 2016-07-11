@@ -71,7 +71,7 @@ class MidiTrackMaker(object):
 	
 	def Terminate( self):
 
-		self.myTrack += self.mySM.TerminateString()
+		self.myTrack += self.mySM.TerminateString( self.myBuffer)
 		
 	def Length( self):
 	
