@@ -8,6 +8,7 @@ class MidiTrackMaker(object):
 		self.myTrack = ""
 		self.myT = translator
 		self.mySM = stringmaker
+		self.myLength = 0	#beats
 	
 	def AppendCadence( self, key, quality):
 	
@@ -57,10 +58,16 @@ class MidiTrackMaker(object):
 		self.myTrack += self.mySM.AppendChord( fiveNotes, 0, 1)
 		self.myTrack += self.mySM.AppendChord( rootNotes, 0, 4)		# 4 beats
 		
+		self.myLength += 8
+		
 	def Terminate( self):
 
 		self.myTrack += self.mySM.TerminateString()
 		
+	def Length( self):
+	
+		return self.myLength
+	
 	def Track( self):
 	
 		return self.myTrack
@@ -74,7 +81,7 @@ if __name__ == "__main__":
 	sm = MidiStringMaker(t)
 	tm = MidiTrackMaker(t,sm)
 	
-	tm.AppendCadence( t.GetMidiCodeForHumans("C4"), "major")
+	tm.AppendCadence( t.GetMidiCodeForHumans("C1"), "major")
 	tm.Terminate()
 	print tm.Track()
-	
+	print tm.Length()

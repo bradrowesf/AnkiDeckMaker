@@ -6,7 +6,7 @@ class NoteTranslator(object):
 	def __init__(self):
 	
 		self.noteTable = []
-		midiPitchValue = 21				# Lowest note on piano
+		midiPitchValue = 12				# C1
 		while midiPitchValue <= 108:	# highest note on piano
 			self.noteTable.append(Note(midiPitchValue))
 			midiPitchValue += 1
@@ -82,17 +82,4 @@ if __name__ == "__main__":
 
 	t = NoteTranslator()
 	print "Translator Instantiated"
-
-	values = t.GetTriadCodes( t.GetMidiCodeForHumans("C4"), "minor", 3)
-	print values
-	values = t.GetTriadCodes( t.GetMidiCodeForHumans("Ab2"), "major", 2)
-	print values
-	values = t.GetTriadCodes( t.GetMidiCodeForHumans("G#6"), "minor", 1)
-	print values
-	
-	valueStrings = t.GetTriadHexCodeStrings( t.GetMidiCodeForHumans("C4"), "major", 1)
-	print valueStrings	
-	valueStrings = t.GetTriadHexCodeStrings( t.GetMidiCodeForHumans("Ab2"), "major", 2)
-	print valueStrings	
-	valueStrings = t.GetTriadHexCodeStrings( t.GetMidiCodeForHumans("G#6"), "minor", 1)
-	print valueStrings
+	t.DumpNotes()
