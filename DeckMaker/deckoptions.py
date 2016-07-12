@@ -12,11 +12,6 @@ class DeckOptions(object):
 	
 		parser.add_argument("pathToConfig", type=str,
 							help="Path to config file")
-		parser.add_argument("pathToOutput", type=str,
-							help="Path to output file")
-		
+			
 	def pathToConfig(self):
 		return self.args.pathToConfig
-		
-	def pathToOutput(self):
-		return self.args.pathToOutput

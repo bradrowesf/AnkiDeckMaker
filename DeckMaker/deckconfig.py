@@ -14,3 +14,12 @@ class Configuration(object):
 		
 	def getLowerRange(self):
 		return self.configs['lower_range']
+		
+	def getProgram(self):
+		return self.configs['Program']
+		
+	def getMidiOutputFile(self):
+		return self.configs['MidiOutputFile']
+		
+	def getRegionOutputFile(self):
+		return self.configs['RegionOutputFile']
