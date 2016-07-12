@@ -6,6 +6,9 @@ class MidiTrackMaker(object):
 	def __init__(self, translator, stringmaker):
 	
 		self.myTrack = ""
+		self.myRegions = ""
+		self.myCurrentRegion = ""
+		self.myRegionIndex = 0
 		self.myT = translator
 		self.mySM = stringmaker
 		self.myLength = 0	#beats
@@ -81,6 +84,28 @@ class MidiTrackMaker(object):
 	
 		return self.myTrack
 		
+	def OpenRegion( self, name):
+	
+		self.myRegionIndex += 1
+		self.myCurrentRegion = name
+		
+		self.myRegions += self.RegionString()
+		
+	def CloseRegion( self):
+	
+		self.myRegions += self.RegionString()
+	
+	def RegionString( self):
+	
+		region = "MARKER " + str(self.myRegionIndex) + " " + str(self.myLength) + " \"" + self.myCurrentRegion + "\"" + " 1 0\n"
+		
+		return region
+	
+	
+	def Regions( self):
+	
+		return self.myRegions
+		
 		
 		
 #test code
@@ -90,10 +115,15 @@ if __name__ == "__main__":
 	sm = MidiStringMaker(t)
 	tm = MidiTrackMaker(t,sm)
 	
+	tm.OpenRegion("Mi")
 	tm.AppendCadence( t.GetMidiCodeForHumans("C4"), "major")
 	tm.AppendOneNote( t.GetMidiCodeForHumans("E5"))
+	tm.CloseRegion()
+	tm.OpenRegion("Me")
 	tm.AppendCadence( t.GetMidiCodeForHumans("C4"), "minor")
 	tm.AppendOneNote( t.GetMidiCodeForHumans("Eb5"))
+	tm.CloseRegion()
 	tm.Terminate()
 	print tm.Track()
+	print tm.Regions()
 	print tm.Length()
