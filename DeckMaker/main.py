@@ -1,5 +1,3 @@
-import argparse
-
 from deckoptions import DeckOptions
 from deckconfig import Configuration
 from notetranslator import NoteTranslator
@@ -29,6 +27,7 @@ class DeckMaker(object):
 		self.t = NoteTranslator()
 		self.sm = MidiStringMaker(self.t)
 		self.tm = MidiTrackMaker(self.t,self.sm)
+		self.fm = FileManager( self.myConfig, self.tm)
 		
 	def Run(self):
 	
@@ -43,15 +42,18 @@ class DeckMaker(object):
 		cards = []
 		cadenceRoot = "C4"
 		notes = ["C5","G5","E5","D5","F5","A5","B5","Eb5","Ab5","Bb5","Db5","Gb5"]
-		names = ["Do","Sol","Mi","Re","Fa","La","Ti","Ri/Me","Si/Le","Li/Te","Di/Ra","Fi/Se"]
+		names = ["Do","Sol","Mi","Re","Fa","La","Ti","Ri or Me","Si or Le","Li or Te","Di or Ra","Fi or Se"]
 		
 		#once major
+		counter = 1
 		for i in range(len(notes)):
-			cards.append(Card(self.t.GetMidiCodeForHumans("C4"), "major", self.t.GetMidiCodeForHumans(notes[i]), names[i]))
+			cards.append(Card(self.t.GetMidiCodeForHumans("C4"), "major", self.t.GetMidiCodeForHumans(notes[i]), "(" + str(counter) + ") " + names[i]))
+			counter += 1
 			
 		#once minor
 		for i in range(len(notes)):
-			cards.append(Card(self.t.GetMidiCodeForHumans("C4"), "major", self.t.GetMidiCodeForHumans(notes[i]), names[i]))
+			cards.append(Card(self.t.GetMidiCodeForHumans("C4"), "minor", self.t.GetMidiCodeForHumans(notes[i]), "(" + str(counter) + ") "  + names[i]))
+			counter += 1
 	
 		#build the tracks
 		for card in cards:
@@ -62,8 +64,16 @@ class DeckMaker(object):
 			
 		self.tm.Terminate()
 	
+		# write out files
+		self.fm.WriteMidiFile()
+		self.fm.WriteRegionFile()
+		
+	def TestFileManager(self):
+	
+		self.fm.TestWrite()
 
 if __name__ == "__main__":
 
 	app = DeckMaker()
 	app.Run()
+	#app.TestFileManager()
